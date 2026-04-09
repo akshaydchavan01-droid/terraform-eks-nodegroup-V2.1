@@ -14,8 +14,8 @@ kubernetes_version = "1.28"
 # RBAC Configuration - Add your IAM user/role for access
 additional_iam_users = [
   {
-    userarn  = "arn:aws:iam::ACCOUNT_ID:user/YOUR_IAM_USER"  # Replace with your IAM user ARN
-    username = "YOUR_IAM_USER"
+    userarn  = "arn:aws:iam::123456789012:user/akshay"
+    username = "akshay"
     groups   = ["system:masters"]
   }
 ]
