@@ -9,7 +9,7 @@ terraform {
     # NEW: Add Kubernetes provider for aws-auth ConfigMap
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.23"
+      version = "~> 2.27"
     }
   }
 
