@@ -1,8 +1,8 @@
 aws_region         = "ap-south-1"
-vpc_id             = "vpc-09eb7603712eb1ff8"
+vpc_id             = "vpc-062f3afc84e953ea2"
 cluster_name       = "akshay-cluster-v01"
-cluster_subnet_ids = ["subnet-0532fb9cd78e3d75f", "subnet-0ec94393235cb3f26"]
-node_subnet_ids    = ["subnet-0532fb9cd78e3d75f", "subnet-0ec94393235cb3f26"]
+cluster_subnet_ids = ["subnet-05ffdbb0846720ccb", "subnet-00547251cf4622393"]
+node_subnet_ids    = ["subnet-05ffdbb0846720ccb", "subnet-00547251cf4622393"]
 node_group_name    = "pc-node-group-v01"
 instance_types     = ["t3.small"]
 desired_size       = 2
