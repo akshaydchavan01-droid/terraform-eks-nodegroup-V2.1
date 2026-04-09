@@ -1,7 +1,7 @@
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = aws_iam_role.cluster.arn
-  version  = var.kubernetes_version
+  version  = var.kubernetes_version   # Recommended: "1.29"
 
   vpc_config {
     subnet_ids              = var.cluster_subnet_ids
@@ -25,15 +25,19 @@ resource "aws_eks_cluster" "this" {
   )
 }
 
+# ✅ FIXED NODE GROUP
 resource "aws_eks_node_group" "node_grp" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = var.node_group_name
   node_role_arn   = aws_iam_role.worker.arn
   subnet_ids      = var.node_subnet_ids
-  capacity_type   = var.capacity_type
-  disk_size       = var.disk_size
-  instance_types  = var.instance_types
-  version         = var.kubernetes_version
+
+  capacity_type  = var.capacity_type
+  disk_size      = var.disk_size
+  instance_types = var.instance_types
+
+  # ✅ IMPORTANT: Let AWS manage AMI
+  ami_type = "AL2_x86_64"
 
   labels = {
     env = var.environment
@@ -63,7 +67,7 @@ resource "aws_eks_node_group" "node_grp" {
   )
 }
 
-# NEW: aws-auth ConfigMap to grant IAM access to Kubernetes RBAC
+# ✅ AWS Auth ConfigMap (RBAC Access)
 resource "kubernetes_config_map" "aws_auth" {
   metadata {
     name      = "aws-auth"
@@ -72,7 +76,6 @@ resource "kubernetes_config_map" "aws_auth" {
 
   data = {
     mapRoles = yamlencode(concat(
-      # Node IAM role mapping
       [
         {
           rolearn  = aws_iam_role.worker.arn
@@ -80,10 +83,9 @@ resource "kubernetes_config_map" "aws_auth" {
           groups   = ["system:bootstrappers", "system:nodes"]
         }
       ],
-      # Additional IAM roles (if needed)
       var.additional_iam_roles
     ))
-    
+
     mapUsers = yamlencode(var.additional_iam_users)
   }
 
@@ -93,7 +95,7 @@ resource "kubernetes_config_map" "aws_auth" {
   ]
 }
 
-# NEW: Output for cluster access
+# ✅ Outputs
 output "cluster_endpoint" {
   value       = aws_eks_cluster.this.endpoint
   description = "EKS cluster endpoint"
