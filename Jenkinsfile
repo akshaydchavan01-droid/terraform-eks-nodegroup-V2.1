@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/akshaydchavan01-droid/terraform-eks-nodegroup-V02.git'
+                git 'https://github.com/akshaydchavan01-droid/terraform-eks-nodegroup-V2.1.git'
             }
         }
 
