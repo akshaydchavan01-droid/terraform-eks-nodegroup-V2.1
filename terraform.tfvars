@@ -9,7 +9,7 @@ desired_size       = 2
 min_size           = 1
 max_size           = 4
 environment        = "dev"
-kubernetes_version = "1.30"
+kubernetes_version = "1.35"
 
 # RBAC Configuration - Add your IAM user/role for access
 additional_iam_users = [
