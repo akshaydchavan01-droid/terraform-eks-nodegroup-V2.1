@@ -66,35 +66,6 @@ resource "aws_eks_node_group" "node_grp" {
     }
   )
 }
-
-# ✅ AWS Auth ConfigMap (RBAC Access)
-resource "kubernetes_config_map" "aws_auth" {
-  metadata {
-    name      = "aws-auth"
-    namespace = "kube-system"
-  }
-
-  data = {
-    mapRoles = yamlencode(concat(
-      [
-        {
-          rolearn  = aws_iam_role.worker.arn
-          username = "system:node:{{EC2PrivateDNSName}}"
-          groups   = ["system:bootstrappers", "system:nodes"]
-        }
-      ],
-      var.additional_iam_roles
-    ))
-
-    mapUsers = yamlencode(var.additional_iam_users)
-  }
-
-  depends_on = [
-    aws_eks_cluster.this,
-    aws_eks_node_group.node_grp
-  ]
-}
-
 # ✅ Outputs
 output "cluster_endpoint" {
   value       = aws_eks_cluster.this.endpoint
