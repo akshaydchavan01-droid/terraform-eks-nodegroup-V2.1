@@ -97,6 +97,28 @@ resource "aws_eks_access_policy_association" "admin_policy" {
     aws_eks_access_entry.admin
   ]
 }
+resource "aws_eks_access_entry" "devops_admin_user" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = "arn:aws:iam::637423619587:user/devops-admin"
+  type          = "STANDARD"
+
+  depends_on = [
+    aws_eks_cluster.this
+  ]
+}
+resource "aws_eks_access_policy_association" "devops_admin_policy" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = aws_eks_access_entry.devops_admin_user.principal_arn
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [
+    aws_eks_access_entry.devops_admin_user
+  ]
+}
 # ✅ Outputs
 output "cluster_endpoint" {
   value       = aws_eks_cluster.this.endpoint
