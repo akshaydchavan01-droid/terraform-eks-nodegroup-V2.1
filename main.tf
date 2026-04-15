@@ -9,7 +9,9 @@ resource "aws_eks_cluster" "this" {
     endpoint_public_access  = true
     security_group_ids      = var.cluster_security_group_ids
   }
-
+ access_config {
+    authentication_mode = "API_AND_CONFIG_MAP"
+  }
   enabled_cluster_log_types = var.cluster_enabled_log_types
 
   depends_on = [
